@@ -55,13 +55,15 @@ const ogUrl = canonical ?? SITE_URL + "/";
 		<link rel="preconnect" href="https://rsms.me/" />
 		<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 		<!--
-			Wix's injected cookie banner (#cookie-banner-root-wix) renders on a white
-			background but sets no text color of its own — it relies on the host page's
-			default (dark) text color. Two problems on this site:
+			Wix's injected cookie banner ([data-hook="ccsu-banner-root"]) renders on a
+			white background but sets no text color of its own — it relies on the host
+			page's default (dark) text color. Two problems on this site:
 			  1. It asks for `font-family: Madefor-Text, Madefor` (no generic fallback),
 			     and we never load those faces — so define the Madefor faces.
-			  2. It inherits our dark-theme `--fg` (light gray), giving light text on a
-			     white banner. Pin the banner text to black, matching www.wix.com.
+			  2. It inherits our dark-theme `--fg` (light gray) from <body>, giving
+			     light text on a white banner. Pin the banner text to black, matching
+			     www.wix.com. (Target the data-hook, not the hashed class, which the
+			     bundle regenerates each build.)
 		-->
 		<link rel="preconnect" href="https://static.parastorage.com" crossorigin />
 		<style is:global>
@@ -79,7 +81,7 @@ const ogUrl = canonical ?? SITE_URL + "/";
 				font-display: swap;
 				src: url("https://static.parastorage.com/fonts/v2/75da2848-97d9-41cf-accf-3f221b33b291/v1/madefor-text-bold.woff2") format("woff2");
 			}
-			#cookie-banner-root-wix {
+			[data-hook="ccsu-banner-root"] {
 				color: #000;
 			}
 		</style>
