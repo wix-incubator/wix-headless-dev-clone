@@ -58,12 +58,24 @@ const ogUrl = canonical ?? SITE_URL + "/";
 			Wix's injected cookie banner (#cookie-banner-root-wix) hard-codes
 			`font-family: Madefor-Text, Madefor` with no generic fallback. We don't
 			load the Madefor faces, so the banner renders in the browser default and
-			looks off vs. the rest of the page. Pin it to Inter to match the site.
+			looks off vs. www.wix.com. Define the Madefor faces so the banner renders
+			in Wix's brand font as designed.
 		-->
+		<link rel="preconnect" href="https://static.parastorage.com" crossorigin />
 		<style is:global>
-			#cookie-banner-root-wix,
-			#cookie-banner-root-wix * {
-				font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+			@font-face {
+				font-family: "Madefor-Text";
+				font-style: normal;
+				font-weight: 400;
+				font-display: swap;
+				src: url("https://static.parastorage.com/fonts/v2/f73e760d-c6b3-4659-9a8c-9ce1d76c1173/v1/madefor-text.woff2") format("woff2");
+			}
+			@font-face {
+				font-family: "Madefor-Text";
+				font-style: normal;
+				font-weight: 700;
+				font-display: swap;
+				src: url("https://static.parastorage.com/fonts/v2/75da2848-97d9-41cf-accf-3f221b33b291/v1/madefor-text-bold.woff2") format("woff2");
 			}
 		</style>
 	</head>
