@@ -55,24 +55,34 @@ const ogUrl = canonical ?? SITE_URL + "/";
 		<link rel="preconnect" href="https://rsms.me/" />
 		<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 		<!--
-			Wix's injected cookie banner ([data-hook="ccsu-banner-root"]) ships a light
-			"wix.com" look: white bar, Madefor brand font, black-outlined pill buttons.
-			On this dark site that clashed (and it sets no text color of its own, so it
-			inherited our light --fg onto a white bar = unreadable). Re-skin it onto the
-			site's design tokens: dark card surface, Inter body / mono buttons, accent
-			(primary = Accept) and outlined (Decline) matching the site's own buttons.
+			Wix's injected cookie consent UI ([data-hook^="ccsu-"]) ships a light
+			"wix.com" look: white surfaces, Madefor brand font, black-outlined pill
+			buttons. On this dark site that clashed (and it sets no text color of its
+			own, so it inherited our light --fg onto white = unreadable). Re-skin both
+			the bottom banner AND the "Advanced" settings modal onto the site's design
+			tokens: dark card surfaces, Inter body / mono buttons, accent primary.
 
-			!important is required: the consent bundle injects its stylesheet AFTER ours,
-			so equal-specificity rules would lose on source order. Target the stable
-			data-hooks, not the hashed classes (.aspXfg etc.) the bundle regenerates.
+			Notes:
+			- !important is required: the consent bundle injects its stylesheet AFTER
+			  ours, so equal-specificity rules would lose on source order.
+			- Target the stable data-hooks, not the hashed classes (.aspXfg, ._4q546…)
+			  the bundle regenerates each build. The one exception is the modal panel,
+			  which has no hook — it's the only child of [data-hook="ccsu-modal"].
+			- We set the font on the shared wrapper so nothing falls back to serif
+			  (the bundle requests Madefor-Text, which we no longer load).
 		-->
 		<style is:global>
+			/* Shared: font for the whole consent UI (banner + modal) */
+			[data-hook="ccsu-banner-wrapper"] {
+				font-family: var(--sans) !important;
+			}
+
+			/* ---- Bottom banner ---- */
 			[data-hook="ccsu-banner-root"] {
 				background: var(--bg-card) !important;
 				color: var(--fg) !important;
 				border-top: 1px solid var(--border-strong);
 				box-shadow: 0 -10px 40px -16px rgba(0, 0, 0, 0.7) !important;
-				font-family: var(--sans);
 			}
 			[data-hook="ccsu-cookie-policy-link"] {
 				color: var(--accent) !important;
@@ -86,7 +96,8 @@ const ogUrl = canonical ?? SITE_URL + "/";
 				color: var(--fg) !important;
 			}
 			[data-hook="ccsu-banner-accept"],
-			[data-hook="ccsu-banner-decline-all"] {
+			[data-hook="ccsu-banner-decline-all"],
+			[data-hook="ccsu-modal-save"] {
 				font-family: var(--mono) !important;
 				border-radius: 8px !important;
 				transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
@@ -100,15 +111,48 @@ const ogUrl = canonical ?? SITE_URL + "/";
 				color: var(--fg) !important;
 				border-color: var(--fg-faint) !important;
 			}
-			[data-hook="ccsu-banner-accept"] {
+			[data-hook="ccsu-banner-accept"],
+			[data-hook="ccsu-modal-save"] {
 				background: var(--accent-fade) !important;
 				border: 1px solid rgba(250, 255, 0, 0.45) !important;
 				color: var(--accent) !important;
 			}
-			[data-hook="ccsu-banner-accept"]:hover {
+			[data-hook="ccsu-banner-accept"]:hover,
+			[data-hook="ccsu-modal-save"]:hover {
 				background: var(--accent) !important;
 				border-color: var(--accent) !important;
 				color: var(--bg) !important;
+			}
+
+			/* ---- "Advanced" settings modal ---- */
+			/* Scrim behind the dialog */
+			[data-hook="ccsu-modal"] {
+				background: rgba(0, 0, 0, 0.6) !important;
+			}
+			/* The dialog panel (only child of the scrim; has no data-hook) */
+			[data-hook="ccsu-modal"] > section {
+				background: var(--bg-card) !important;
+				color: var(--fg) !important;
+				border: 1px solid var(--border-strong) !important;
+				border-radius: var(--radius) !important;
+				box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7) !important;
+			}
+			[data-hook="ccsu-modal-title"],
+			[data-hook="ccsu-modal-s1-title"],
+			[data-hook="ccsu-modal-s2-title"] {
+				color: var(--fg) !important;
+			}
+			[data-hook="ccsu-modal-content"],
+			[data-hook="ccsu-modal-s1-text"],
+			[data-hook="ccsu-modal-s2-text"],
+			[data-hook="ccsu-modal-recommended-checkbox-label"] {
+				color: var(--fg-muted) !important;
+			}
+			[data-hook="ccsu-modal-close"] {
+				color: var(--fg-muted) !important;
+			}
+			[data-hook="ccsu-modal-close"]:hover {
+				color: var(--fg) !important;
 			}
 		</style>
 	</head>
