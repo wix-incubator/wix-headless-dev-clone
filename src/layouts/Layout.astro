@@ -55,34 +55,60 @@ const ogUrl = canonical ?? SITE_URL + "/";
 		<link rel="preconnect" href="https://rsms.me/" />
 		<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 		<!--
-			Wix's injected cookie banner ([data-hook="ccsu-banner-root"]) renders on a
-			white background but sets no text color of its own — it relies on the host
-			page's default (dark) text color. Two problems on this site:
-			  1. It asks for `font-family: Madefor-Text, Madefor` (no generic fallback),
-			     and we never load those faces — so define the Madefor faces.
-			  2. It inherits our dark-theme `--fg` (light gray) from <body>, giving
-			     light text on a white banner. Pin the banner text to black, matching
-			     www.wix.com. (Target the data-hook, not the hashed class, which the
-			     bundle regenerates each build.)
+			Wix's injected cookie banner ([data-hook="ccsu-banner-root"]) ships a light
+			"wix.com" look: white bar, Madefor brand font, black-outlined pill buttons.
+			On this dark site that clashed (and it sets no text color of its own, so it
+			inherited our light --fg onto a white bar = unreadable). Re-skin it onto the
+			site's design tokens: dark card surface, Inter body / mono buttons, accent
+			(primary = Accept) and outlined (Decline) matching the site's own buttons.
+
+			!important is required: the consent bundle injects its stylesheet AFTER ours,
+			so equal-specificity rules would lose on source order. Target the stable
+			data-hooks, not the hashed classes (.aspXfg etc.) the bundle regenerates.
 		-->
-		<link rel="preconnect" href="https://static.parastorage.com" crossorigin />
 		<style is:global>
-			@font-face {
-				font-family: "Madefor-Text";
-				font-style: normal;
-				font-weight: 400;
-				font-display: swap;
-				src: url("https://static.parastorage.com/fonts/v2/f73e760d-c6b3-4659-9a8c-9ce1d76c1173/v1/madefor-text.woff2") format("woff2");
-			}
-			@font-face {
-				font-family: "Madefor-Text";
-				font-style: normal;
-				font-weight: 700;
-				font-display: swap;
-				src: url("https://static.parastorage.com/fonts/v2/75da2848-97d9-41cf-accf-3f221b33b291/v1/madefor-text-bold.woff2") format("woff2");
-			}
 			[data-hook="ccsu-banner-root"] {
-				color: #000;
+				background: var(--bg-card) !important;
+				color: var(--fg) !important;
+				border-top: 1px solid var(--border-strong);
+				box-shadow: 0 -10px 40px -16px rgba(0, 0, 0, 0.7) !important;
+				font-family: var(--sans);
+			}
+			[data-hook="ccsu-cookie-policy-link"] {
+				color: var(--accent) !important;
+			}
+			[data-hook="ccsu-banner-settings"],
+			[data-hook="ccsu-banner-decline"] {
+				color: var(--fg-muted) !important;
+			}
+			[data-hook="ccsu-banner-settings"]:hover,
+			[data-hook="ccsu-banner-decline"]:hover {
+				color: var(--fg) !important;
+			}
+			[data-hook="ccsu-banner-accept"],
+			[data-hook="ccsu-banner-decline-all"] {
+				font-family: var(--mono) !important;
+				border-radius: 8px !important;
+				transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+			}
+			[data-hook="ccsu-banner-decline-all"] {
+				background: transparent !important;
+				border: 1px solid var(--border-strong) !important;
+				color: var(--fg-muted) !important;
+			}
+			[data-hook="ccsu-banner-decline-all"]:hover {
+				color: var(--fg) !important;
+				border-color: var(--fg-faint) !important;
+			}
+			[data-hook="ccsu-banner-accept"] {
+				background: var(--accent-fade) !important;
+				border: 1px solid rgba(250, 255, 0, 0.45) !important;
+				color: var(--accent) !important;
+			}
+			[data-hook="ccsu-banner-accept"]:hover {
+				background: var(--accent) !important;
+				border-color: var(--accent) !important;
+				color: var(--bg) !important;
 			}
 		</style>
 	</head>
