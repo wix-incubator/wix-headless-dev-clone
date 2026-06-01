@@ -54,6 +54,18 @@ const ogUrl = canonical ?? SITE_URL + "/";
 		})} />
 		<link rel="preconnect" href="https://rsms.me/" />
 		<link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+		<!--
+			Wix's injected cookie banner (#cookie-banner-root-wix) hard-codes
+			`font-family: Madefor-Text, Madefor` with no generic fallback. We don't
+			load the Madefor faces, so the banner renders in the browser default and
+			looks off vs. the rest of the page. Pin it to Inter to match the site.
+		-->
+		<style is:global>
+			#cookie-banner-root-wix,
+			#cookie-banner-root-wix * {
+				font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+			}
+		</style>
 	</head>
 	<body>
 		<slot />
