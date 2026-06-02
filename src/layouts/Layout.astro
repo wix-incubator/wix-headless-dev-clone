@@ -176,7 +176,14 @@ const ogUrl = canonical ?? SITE_URL + "/";
 			[data-hook="ccsu-modal-s2-title"] {
 				color: var(--fg) !important;
 				font-family: var(--mono) !important;
-				letter-spacing: -0.01em !important;
+				/* Mono glyphs are ~20% wider and carry a taller line box than the
+				   Madefor these rows were sized for, so headings wrapped and the
+				   toggles fell out of alignment. Scale down to recover roughly the
+				   original footprint and pin the line-height to the bundle's
+				   rhythm — keeps the mono look without breaking the layout. */
+				font-size: 0.85em !important;
+				line-height: 1.3 !important;
+				letter-spacing: 0 !important;
 			}
 			[data-hook="ccsu-modal-content"],
 			[data-hook="ccsu-modal-s1-text"],
