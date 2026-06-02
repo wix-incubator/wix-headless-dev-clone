@@ -105,9 +105,16 @@ const ogUrl = canonical ?? SITE_URL + "/";
 			[data-hook="ccsu-cookie-policy-link"] {
 				color: var(--accent) !important;
 			}
+			/* "Advanced"/settings + decline are text-link controls. They carry the
+			   bundle's own font-family: Madefor-Text, which beats the --sans we set
+			   on the wrapper (a directly-matched rule wins over an inherited one),
+			   so without an explicit family they render in the unloaded-Madefor
+			   fallback — a different font from the mono action buttons beside them.
+			   Pin them to --mono so every banner control shares one font. */
 			[data-hook="ccsu-banner-settings"],
 			[data-hook="ccsu-banner-decline"] {
 				color: var(--fg-muted) !important;
+				font-family: var(--mono) !important;
 			}
 			[data-hook="ccsu-banner-settings"]:hover,
 			[data-hook="ccsu-banner-decline"]:hover {
