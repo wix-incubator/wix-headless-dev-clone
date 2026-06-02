@@ -168,11 +168,15 @@ const ogUrl = canonical ?? SITE_URL + "/";
 				so the wrapper rule above can't reach them — without Madefor loaded they
 				fall back to Times (serif). Force the site font directly on each hook.
 			*/
+			/* Headings use the mono face so the "Advanced" panel matches the site's
+			   terminal/button aesthetic (the modal buttons are already mono);
+			   the descriptive paragraphs below stay --sans for readability. */
 			[data-hook="ccsu-modal-title"],
 			[data-hook="ccsu-modal-s1-title"],
 			[data-hook="ccsu-modal-s2-title"] {
 				color: var(--fg) !important;
-				font-family: var(--sans) !important;
+				font-family: var(--mono) !important;
+				letter-spacing: -0.01em !important;
 			}
 			[data-hook="ccsu-modal-content"],
 			[data-hook="ccsu-modal-s1-text"],
